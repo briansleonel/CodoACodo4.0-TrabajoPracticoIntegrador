@@ -14,3 +14,16 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+.contenedor{
+  -webkit-filter: grayscale(40%);
+    filter: grayscale(40%);
+}
+
+.subtitle {
+  font-size: 1.4em;
+  font-weight: 500;
+  margin-bottom: 1.2em;
+  border-bottom: 1px solid #1d4ed8;
+  margin-top: 50px;
+}

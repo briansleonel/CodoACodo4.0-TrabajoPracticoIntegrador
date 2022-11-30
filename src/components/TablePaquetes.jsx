@@ -1,16 +1,26 @@
 import { useEffect, useState } from "react";
 
-import { TrashIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
+import { TrashIcon, PencilSquareIcon, PlusIcon } from "@heroicons/react/20/solid";
+import { useNavigate } from "react-router-dom";
 
 const TablePaquetes = (props) => {
-    const { paquetesData, removePaquete, setPaquete } = props;
+    const { paquetesData, removePaquete } = props;
+
+    const navigate = useNavigate();
+
+    const onHandleClickAgregar = () => {
+        navigate("/formulario")
+    }
 
     return (
-        <div className="md:w-3/5 lg:w-3/5">
-            <div>
+        <div className="md:w-screen">
+            <div className="mb-5">
                 <p className="text-3xl text-center mb-5 text-slate-800 underline underline-offset-4">
                     Listado de paquetes
                 </p>
+                <button type="button" className="bg-blue-800 p-1 text-white hover:bg-blue-700  cursor-pointer transition-all rounded-md flex items-center mx-5" title="Agregar paquete" onClick={() => onHandleClickAgregar()}>
+                    <PlusIcon className="h-6 w-6"/><span className="text-sm mx-2">Agregar</span>
+                </button>
             </div>
             <div className="overflow-x-auto relative shadow-md sm:rounded-lg mx-5">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -18,7 +28,7 @@ const TablePaquetes = (props) => {
                     <TableBody
                         paquetesData={paquetesData}
                         removePaquete={removePaquete}
-                        setPaquete={setPaquete}
+                        navigate={navigate}
                     />
                 </table>
             </div>
@@ -40,10 +50,10 @@ const TableHead = () => {
                     Direccion
                 </th>
                 <th scope="col" className="py-3 px-6">
-                    Peso
+                    C.P.
                 </th>
                 <th scope="col" className="py-3 px-6">
-                    C.P.
+                    Peso
                 </th>
                 <th scope="col" className="py-3 px-6">
                     Acción
@@ -54,7 +64,14 @@ const TableHead = () => {
 };
 
 const TableBody = (props) => {
-    const { paquetesData, removePaquete, setPaquete } = props;
+    const { paquetesData, removePaquete, navigate } = props;
+
+    
+
+    function editPaquete(id) {
+        const resp = confirm("¿Editar paquete?");
+        if (resp) navigate(`/formulario/${id}`);
+    }
 
     const rowsTable = paquetesData.map((element, index) => {
         return (
@@ -64,20 +81,20 @@ const TableBody = (props) => {
             >
                 <td className="py-4 px-6">{element.nombre}</td>
                 <td className="py-4 px-6">{element.apellido}</td>
-                <td className="py-4 px-6">{element.peso} Kg.</td>
                 <td className="py-4 px-6">{element.direccion}</td>
                 <td className="py-4 px-6">{element.cp}</td>
+                <td className="py-4 px-6">{element.peso} Kg.</td>
                 <td className="py-4 px-6 flex gap-2">
                     <button
-                        className="bg-red-600 p-2 text-white uppercase hover:bg-red-500  cursor-pointer transition-all rounded-md"
+                        className="bg-red-600 p-2 text-white uppercase hover:bg-red-500  cursor-pointer transition-all rounded-md" title="Eliminar paquete"
                         onClick={() => removePaquete(index)}
                     >
                         <TrashIcon className="h-4 w-4" />
                     </button>
 
                     <button
-                        className="bg-yellow-500 p-2 text-white uppercase hover:bg-yellow-400  cursor-pointer transition-all rounded-md"
-                        onClick={() => setPaquete(element)}
+                        className="bg-yellow-500 p-2 text-white uppercase hover:bg-yellow-400  cursor-pointer transition-all rounded-md" title="Editar paquete"
+                        onClick={() => editPaquete(element.id)}
                     >
                         <PencilSquareIcon className="h-4 w-4" />
                     </button>

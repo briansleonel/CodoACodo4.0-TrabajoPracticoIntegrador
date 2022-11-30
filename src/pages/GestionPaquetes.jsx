@@ -1,36 +1,13 @@
-import { useState } from "react";
-import FormularioPaquete from "../components/FormularioPaquete";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+//import FormularioPaquete from "../components/FormularioPaquete";
 import TablePaquetes from "../components/TablePaquetes";
+import { getPaquetes, updatePaquetes } from "../controllers/paquete";
 
-const paquetes = [
-    {
-        id : 1,
-        nombre: "Carolina",
-        apellido: "Martinez",
-        direccion: "Av Brasil 345 - Jujuy",
-        peso: "10",
-        cp: "4612",
-    },
-    {
-        id : 2,
-        nombre: "María",
-        apellido: "Mamani",
-        direccion: "Av Fascio 3453",
-        peso: "12",
-        cp: "4612",
-    },
-    {
-        id: 3,
-        nombre: "Lucas",
-        apellido: "Gomez",
-        direccion: "Av Alte. Brown 444 - Jujuy",
-        peso: "40",
-        cp: "4612",
-    },
-];
+const paquetes = await getPaquetes();
 
 const GestionPaquetes = () => {
-    const [paquetesData, setPaquetesData] = useState(paquetes);
+    const [paquetesData, setPaquetesData] = useState([]);
 
     const [paquete, setPaquete] = useState({
         nombre: "",
@@ -40,18 +17,32 @@ const GestionPaquetes = () => {
         cp: "",
     });
 
-    const removePaquete = (index) => {
-        setPaquetesData(
-            paquetesData.filter((p, i) => {
+    useEffect(() => {
+        loadPaquetes();
+    }, [paquetes])
+
+    async function loadPaquetes() {
+        const paquetes = await getPaquetes();
+        setPaquetesData(paquetes);
+    }
+
+    async function removePaquete (index) {
+        const resp = confirm("¿Eliminar paquete?");
+        if(resp) {
+            const paquetesUpdate = paquetesData.filter((p, i) => {
                 return i !== index;
             })
-        );
+            const statusUpdate = await updatePaquetes(paquetesUpdate);
+            statusUpdate ? loadPaquetes() : console.log("No se actualizó");
+        }
     };
 
     return (
         <div className="container mx-auto mt-10">
             <div className="md:flex">
-                <FormularioPaquete paquete={paquete} setPaquete={setPaquete} paquetesData={paquetesData} setPaquetesData={setPaquetesData} />
+                {/*
+                <FormularioPaquete paquete={paquete} setPaquete={setPaquete} paquetesData={paquetesData} setPaquetesData={setPaquetesData} /> */}
+                
                 <TablePaquetes
                     paquetesData={paquetesData}
                     removePaquete={removePaquete}

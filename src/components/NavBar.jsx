@@ -3,13 +3,13 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
-import imgLogo from "../assets/paquete.png"
+import imgLogo from "../assets/paquete.png";
 
 const navigation = [
     { name: "Inicio", href: "/", current: true },
-    { name: "Gestión de paquetes", href: "gestion-paquetes", current: false },
-    { name: "Contactanos", href: "contact", current: false },
-    { name: "Acerca de", href: "about", current: false },
+    { name: "Formulario", href: "/formulario", current: false },
+    { name: "Gestión de paquetes", href: "/gestion-paquetes", current: false },
+    { name: "Acerca de", href: "/about", current: false },
 ];
 
 function classNames(...classes) {
@@ -17,6 +17,18 @@ function classNames(...classes) {
 }
 
 export default function NavBar() {
+    function setCurrent(item) {
+        const navEdit = navigation.map((element) => {
+            if (element == item) {
+                element.current = true;
+            } else {
+                element.current = false;
+            }
+
+            return element;
+        });
+    }
+
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
