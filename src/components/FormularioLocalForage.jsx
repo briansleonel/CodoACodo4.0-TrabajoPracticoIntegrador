@@ -5,29 +5,44 @@ import {
     updatePaquetes,
 } from "../controllers/paquete";
 
+const minCharacters = 4;
+const minCharactersDireccion = 10;
+
 import { useNavigate, useParams } from "react-router-dom";
 
 const validateForm = (input) => {
     let errors = {};
 
+    const regExpNumeros = /^[0-9]+$/
+
     if (!input.nombre) {
         errors.nombre = "Campo requerido.";
+    } else if(input.nombre.length < minCharacters) {
+        errors.nombre = `Debe contener al menos ${minCharacters} caracteres.`
     }
 
     if (!input.apellido) {
         errors.apellido = "Campo requerido.";
+    } else if(input.apellido.length < minCharacters) {
+        errors.apellido = `Debe contener al menos ${minCharacters} caracteres.`
     }
 
     if (!input.direccion) {
         errors.direccion = "Campo requerido.";
+    } else if(input.direccion.length < minCharactersDireccion) {
+        errors.direccion = `Debe contener al menos ${minCharactersDireccion} caracteres.`
     }
 
     if (!input.peso) {
         errors.peso = "Campo requerido.";
+    } else if(!regExpNumeros.exec(input.peso)) {
+        errors.peso = "Ingrese solo números."
     }
 
     if (!input.cp) {
         errors.cp = "Campo requerido.";
+    } else if(!regExpNumeros.exec(input.cp)) {
+        errors.cp = "Ingrese solo números."
     }
 
     return errors;
@@ -187,6 +202,7 @@ const FormularioLocalForage = (props) => {
                         className={errors.nombre ? styleInputError : styleInput}
                         value={paquete.nombre}
                         onChange={(event) => onHandleChange(event)}
+                        title={errors.nombre}
                     />
 
                     {/*errors.nombre ? (
@@ -216,6 +232,7 @@ const FormularioLocalForage = (props) => {
                         }
                         value={paquete.apellido}
                         onChange={(event) => onHandleChange(event)}
+                        title={errors.apellido}
                     />
                 </div>
 
@@ -237,6 +254,7 @@ const FormularioLocalForage = (props) => {
                         }
                         value={paquete.direccion}
                         onChange={(event) => onHandleChange(event)}
+                        title={errors.direccion}
                     />
                 </div>
 
@@ -256,6 +274,7 @@ const FormularioLocalForage = (props) => {
                         className={errors.peso ? styleInputError : styleInput}
                         value={paquete.peso}
                         onChange={(event) => onHandleChange(event)}
+                        title={errors.peso}
                     />
                 </div>
 
@@ -275,6 +294,7 @@ const FormularioLocalForage = (props) => {
                         className={errors.cp ? styleInputError : styleInput}
                         value={paquete.cp}
                         onChange={(event) => onHandleChange(event)}
+                        title={errors.cp}
                     />
                 </div>
 
